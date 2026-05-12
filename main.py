@@ -1,8 +1,8 @@
 from turtle import Screen
-import scoreboard
+from scoreboard import Scoreboard
 from snake import Snake
 from food import Food
-from scoreboard import Scoreboard
+
 
 import time
 
@@ -25,28 +25,27 @@ screen.update()
 game_on_state = True
 
 while game_on_state:
-     screen.update()
-     time.sleep(0.1)
-     my_snake.move_forward()
-     # In main.py loop:
-     # Inside while game_on_state:
-     if my_snake.segments[0].distance(food) < 15:
-        food.refresh() # This will now work correctly!
-        my_snake.extend() # This will now work correctly!
-        score_board.increase_score() # This will now work correctly!
-     my_snake.wall_collision()
-     
-    # 3. Check if we should stop the game
-     if my_snake.game_on_state == False:
-        game_on_state = False
-        score_board.game_over()
+    screen.update()
+    time.sleep(0.1)
+    my_snake.move_forward()
 
-     for segment in my_snake.segments[1:]:
-        if my_snake.segments[0] == segment:
-            pass
-        elif my_snake.segments[0].distance(segment) < 10:
-            game_on_state = False
-            score_board.game_over()   
+    # Food Collision
+    if my_snake.segments[0].distance(food) < 15:
+        food.refresh()
+        my_snake.extend()
+        score_board.increase_score()
+
+    # Wall Collision
+    if abs(my_snake.segments[0].xcor()) > 290 or abs(my_snake.segments[0].ycor()) > 290:  
+        score_board.reset()
+        my_snake.reset_snake() # ADD THIS
+
+    # Tail Collision
+    for segment in my_snake.segments[1:]:
+        if my_snake.segments[0].distance(segment) < 10:
+            score_board.reset()
+            my_snake.reset_snake() # ADD THIS
+
 
 
 
